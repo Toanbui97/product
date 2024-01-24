@@ -17,7 +17,6 @@ public class HttpRequestAop {
 
     private final HttpSession httpSession;
     private final HttpServletRequest httpServletRequest;
-    private final RequestInformation requestInformation;
 
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
@@ -25,9 +24,11 @@ public class HttpRequestAop {
     }
 
     @Before("restApiPointCut()")
-    public void beforeCallApi(JoinPoint joinPoint) {
-        requestInformation.requestId = httpServletRequest.getHeader("requestId");
-        requestInformation.ref = httpServletRequest.getHeader("ref");
-        requestInformation.userId = httpServletRequest.getHeader("userId");
+    public void beforeCallApi() {
+        var requestInformation = new RequestInformation();
+        requestInformation.setRequestId(httpServletRequest.getHeader("requestId"));
+        requestInformation.setRef(httpServletRequest.getHeader("ref"));
+        requestInformation.setUserId(httpServletRequest.getHeader("userId"));
+        httpSession.setAttribute("requestInformation", requestInformation);
     }
 }

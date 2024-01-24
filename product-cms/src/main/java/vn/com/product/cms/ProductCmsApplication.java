@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpRequest;
@@ -16,11 +17,21 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 @SpringBootApplication
 @EnableAsync
+@EnableFeignClients
 public class ProductCmsApplication {
 
+    @Bean
+    public ExecutorService executors() {
+        ThreadFactory factory = Thread.ofVirtual().inheritInheritableThreadLocals(true)
+                .factory();
+        return Executors.newThreadPerTaskExecutor(factory);
+    }
 
     @Bean
     @RequestScope

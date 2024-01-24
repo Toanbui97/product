@@ -1,6 +1,15 @@
 package vn.com.product.cms;
 
-public class RequestInformation {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.io.Serializable;
+
+@Getter
+@Setter
+@ToString
+public class RequestInformation implements Serializable {
 
 
     public RequestInformation(String requestId, String ref, String userId) {
@@ -12,7 +21,7 @@ public class RequestInformation {
     public RequestInformation() {
     }
 
-    String requestId;
-    String ref;
-    String userId;
+    private String requestId;
+    private String ref;
+    private String userId;
 }
