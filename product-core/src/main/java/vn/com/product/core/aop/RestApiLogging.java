@@ -30,8 +30,10 @@ public class RestApiLogging {
     private CommonHttpHeader commonHttpHeader;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-    public void restApiPointCut() {
-    }
+    public void restApiPointCut() {}
+
+    @Pointcut("within(vn.com.product.core.api.ResponseFactory)")
+    public void responseEntityPointCut() {}
 
     @Before("restApiPointCut()")
     public void beforeCallApi(JoinPoint joinPoint) {
@@ -59,8 +61,8 @@ public class RestApiLogging {
         }
     }
 
-    @AfterReturning(value = "restApiPointCut()", returning = "response")
-    public void afterReturnResponse(JoinPoint joinPoint, ResponseEntity<?> response) {
+    @AfterReturning(value = "responseEntityPointCut()", returning = "response")
+    public void afterReturnResponse(ResponseEntity<?> response) {
         if (response != null && response.getBody() instanceof BaseResponse<?> body) {
             log.info("""
                             

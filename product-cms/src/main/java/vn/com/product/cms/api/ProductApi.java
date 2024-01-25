@@ -33,7 +33,7 @@ public class ProductApi {
             CompletableFuture.runAsync(localClient::success, executorService).join();
         } else {
             CompletableFuture.runAsync(localClient::fail, executorService)
-                    .exceptionally(throwable -> {
+                    .exceptionally(_ -> {
                         throw new FeignClientException(ExceptionMessage.EXCEPT0001, TestRequest.Fields.type);
                     }).join();
         }
@@ -50,5 +50,4 @@ public class ProductApi {
     public ResponseEntity<BaseResponse<Object>> fail() {
         throw new BusinessException(ExceptionMessage.EXCEPT0001, "");
     }
-
 }
