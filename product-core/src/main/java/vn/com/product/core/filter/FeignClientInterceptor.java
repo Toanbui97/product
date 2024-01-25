@@ -5,7 +5,7 @@ import feign.RequestTemplate;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import vn.com.product.core.factory.CommonHttpHeader;
+import vn.com.product.core.api.CommonHttpHeader;
 
 @Component
 @Slf4j

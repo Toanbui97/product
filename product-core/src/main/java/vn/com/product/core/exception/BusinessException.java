@@ -1,25 +1,12 @@
 package vn.com.product.core.exception;
 
 import lombok.Getter;
+import vn.com.product.core.constant.ExceptionMessage;
 
 @Getter
-public class BusinessException extends RuntimeException {
+public class BusinessException extends BaseException {
 
-    private final transient String fieldName;
-    private final transient Object[] objects;
-    private final transient String message;
-
-    public BusinessException(String fieldName, String message, Object... objects) {
-        super("BusinessException");
-        this.fieldName = fieldName;
-        this.message = message;
-        this.objects = objects;
-    }
-
-    public BusinessException(String message) {
-        super("BusinessException");
-        this.fieldName = null;
-        this.message = message;
-        this.objects = null;
+    public BusinessException(ExceptionMessage exceptionMessage, String objects) {
+        super(exceptionMessage, objects);
     }
 }

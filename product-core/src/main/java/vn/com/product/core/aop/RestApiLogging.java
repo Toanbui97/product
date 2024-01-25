@@ -13,9 +13,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import vn.com.product.core.utils.JSONParserUtils;
-import vn.com.product.core.factory.BaseRequest;
-import vn.com.product.core.factory.BaseResponse;
-import vn.com.product.core.factory.CommonHttpHeader;
+import vn.com.product.core.api.BaseRequest;
+import vn.com.product.core.api.BaseResponse;
+import vn.com.product.core.api.CommonHttpHeader;
 
 @Aspect
 @Configuration

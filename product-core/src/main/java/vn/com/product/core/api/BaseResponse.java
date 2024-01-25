@@ -1,4 +1,4 @@
-package vn.com.product.core.factory;
+package vn.com.product.core.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -17,14 +17,15 @@ import java.time.Instant;
 public class BaseResponse<T> implements Serializable {
 
     private int status;
+    private String errorKey;
     private String message;
-    private String errorMessage;
     private String traceId;
-    private Long responseTimestamp = Instant.now().toEpochMilli();
+    private String fieldError;
+    private long responseTimestamp = Instant.now().toEpochMilli();
     private Integer page;
     private Integer size;
     private Long totalRecord;
-    private Integer totalPage;
+    private Long totalPage;
     private transient T data;
 
     public BaseResponse(int status, String message, String traceId) {
@@ -37,4 +38,15 @@ public class BaseResponse<T> implements Serializable {
         this(status, message, traceId);
         this.data = data;
     }
+    public BaseResponse(int status, String message, String errorKey, String traceId, String fieldError) {
+        this(status, message, traceId);
+        this.errorKey = errorKey;
+        this.fieldError = fieldError;
+    }
+
+    public BaseResponse(int status, String message, String errorKey, String traceId, String fieldError, T data) {
+       this(status, message, errorKey, traceId, fieldError);
+       this.data = data;
+    }
+
 }

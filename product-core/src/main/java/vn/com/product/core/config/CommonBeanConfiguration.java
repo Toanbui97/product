@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.DispatcherServlet;
-import vn.com.product.core.factory.CommonHttpHeader;
+import vn.com.product.core.api.CommonHttpHeader;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

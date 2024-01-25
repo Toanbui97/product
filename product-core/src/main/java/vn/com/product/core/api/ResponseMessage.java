@@ -1,4 +1,4 @@
-package vn.com.product.core.factory;
+package vn.com.product.core.api;
 
 public enum ResponseMessage {
     SUCCESS("success"),
