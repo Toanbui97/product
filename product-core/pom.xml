@@ -14,14 +14,13 @@
     <description>product-core</description>
     <properties>
         <java.version>21</java.version>
+        <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${openfeign.version}</version>
         </dependency>
-
     </dependencies>
-
-
 </project>

@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            loggerLevel: FULL
+
+logging:
+  level:
+    vn.com.product.cms.client: DEBUG
