@@ -4,8 +4,4 @@ spring:
       client:
         config:
           default:
-            loggerLevel: FULL
-
-logging:
-  level:
-    vn.com.product.cms.client: DEBUG
+            loggerLevel: BASIC

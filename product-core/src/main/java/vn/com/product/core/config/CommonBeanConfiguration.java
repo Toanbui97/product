@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.DispatcherServlet;
 import vn.com.product.core.api.CommonHttpHeader;
@@ -19,7 +20,7 @@ import java.util.concurrent.Executors;
 public class CommonBeanConfiguration {
 
     @Bean
-    @SessionScope
+    @RequestScope
     public CommonHttpHeader commonHttpHeader(HttpServletRequest httpServletRequest) {
         var commonHeader = new CommonHttpHeader();
         commonHeader.setTraceId(httpServletRequest.getHeader("trace-id"));

@@ -19,21 +19,16 @@ public class RestApiExceptionHandler {
 
     @ExceptionHandler(value = BusinessException.class)
     ResponseEntity<BaseResponse<Void>> handleException(BusinessException exception) {
-        log.error(exception.getMessage(), exception);
         return responseFactory.fail(null, HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), exception);
     }
 
     @ExceptionHandler(value = FeignClientException.class)
     ResponseEntity<BaseResponse<Void>> handleException(FeignClientException exception) {
-        log.error(exception.getMessage(), exception);
         return responseFactory.fail(null, HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), exception);
     }
 
     @ExceptionHandler(value = TimeoutException.class)
     ResponseEntity<BaseResponse<Void>> handleException(TimeoutException exception) {
-        log.error(exception.getMessage(), exception);
         return responseFactory.fail(null, HttpStatusCode.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), exception);
     }
-
-
 }

@@ -38,26 +38,30 @@ public class RestApiLogging {
     @Before("restApiPointCut()")
     public void beforeCallApi(JoinPoint joinPoint) {
         var requestBody = getRequestBody(joinPoint);
+        var headerLogString = new StringBuilder();
+
+        commonHttpHeader.getHeaderMap().forEach((key, value) ->
+                headerLogString.append(StringTemplate.STR."\{key}= \{value}")
+                        .append(System.lineSeparator()));
 
         if (requestBody != null) {
-
             log.info("""
 
-                            ===================> Receive: {}.{}
-                            HttpHeader: {}
-                            RequestBody: {}
+                            ---> Receive: {}.{}
+                            {}
+                            {}
                             """,
                     httpRequest.getMethod(), httpRequest.getRequestURL(),
-                    JSONParserUtils.writeValueAsString(commonHttpHeader.getHeaderMap()),
+                    headerLogString,
                     JSONParserUtils.writeValueAsString(requestBody));
         } else {
             log.info("""
                             
-                            ===================> Receive: {}.{}
-                            HttpHeader: {}
+                            ---> Receive: {}.{}
+                            {}
                             """,
                     httpRequest.getMethod(), httpRequest.getRequestURL(),
-                    JSONParserUtils.writeValueAsString(commonHttpHeader.getHeaderMap()));
+                    headerLogString);
         }
     }
 
@@ -66,7 +70,7 @@ public class RestApiLogging {
         if (response != null && response.getBody() instanceof BaseResponse<?> body) {
             log.info("""
                             
-                            ===================> Response: {}.{}
+                            <--- Response: {}.{}
                             {}
                             """
                     , httpRequest.getMethod(), httpRequest.getRequestURL(), JSONParserUtils.writeValueAsString(body));

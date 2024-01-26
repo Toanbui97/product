@@ -1,5 +1,8 @@
 package vn.com.product.core.api;
 
+import lombok.Getter;
+
+@Getter
 public enum ResponseMessage {
     SUCCESS("success"),
     FAILED("failed");
@@ -10,7 +13,4 @@ public enum ResponseMessage {
         this.message = message;
     }
 
-    public String getMessage() {
-        return this.message;
-    }
 }
