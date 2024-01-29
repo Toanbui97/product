@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExceptionMessage {
 
-    EXCEPT0001("EXCEPT0001", "Internal server error");
+    EXCEPT0001("EXCEPT0001", "Internal server error"),
+    EXCEPT0002("EXCEPT0002", "Missing require http header");
 
     private String key;
     private String value;

@@ -2,6 +2,7 @@ package vn.com.product.core.api;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -24,9 +25,9 @@ public class CommonHttpHeader implements Serializable {
     private String locale;
 
     public Map<String, String> getHeaderMap() {
-        return Map.of(CORRELATION_ID, this.correlationId,
-                USER_ID, this.userId,
-                REF_ID, this.refId,
-                LANGUAGE, this.locale);
+        return Map.of(CORRELATION_ID, StringUtils.hasText(this.correlationId) ? this.correlationId : "",
+                USER_ID, StringUtils.hasText(this.userId) ? this.userId : "",
+                REF_ID, StringUtils.hasText(this.refId) ? this.refId : "",
+                LANGUAGE, StringUtils.hasText(this.locale) ? this.locale : "");
     }
 }

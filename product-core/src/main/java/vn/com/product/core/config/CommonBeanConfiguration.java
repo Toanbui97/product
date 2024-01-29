@@ -18,21 +18,21 @@ import java.util.concurrent.Executors;
 @RequiredArgsConstructor
 public class CommonBeanConfiguration {
 
-    @Bean
+    @Bean(name = "commonHttpHeader")
     @RequestScope
     public CommonHttpHeader commonHttpHeader(HttpServletRequest httpServletRequest) {
         var commonHeader = new CommonHttpHeader();
         commonHeader.setCorrelationId(httpServletRequest.getHeader(CommonHttpHeader.CORRELATION_ID));
         commonHeader.setRefId(httpServletRequest.getHeader(CommonHttpHeader.REF_ID));
         commonHeader.setUserId(httpServletRequest.getHeader(CommonHttpHeader.USER_ID));
-        commonHeader.setLocale(StringUtils.hasText(httpServletRequest.getHeader(CommonHttpHeader.LANGUAGE)) ?
-                httpServletRequest.getHeader(CommonHttpHeader.LANGUAGE) : CommonHttpHeader.LANGUAGE_DEFAULT);
+        commonHeader.setLocale(httpServletRequest.getHeader(CommonHttpHeader.LANGUAGE));
         return commonHeader;
     }
 
     @Bean
     public ExecutorService executorService() {
-        return Executors.newThreadPerTaskExecutor(Thread.ofVirtual().inheritInheritableThreadLocals(true).factory());
+        return Executors.newThreadPerTaskExecutor(Thread.ofVirtual()
+                .inheritInheritableThreadLocals(true).factory());
     }
 
     @Bean(name = DispatcherServletAutoConfiguration.DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)

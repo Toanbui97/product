@@ -5,3 +5,9 @@ spring:
         config:
           default:
             loggerLevel: BASIC
+
+endpoint:
+  no-auth: > 
+    /swagger-ui*/**,
+    /favicon.ico,
+    /v3/api-docs*/**

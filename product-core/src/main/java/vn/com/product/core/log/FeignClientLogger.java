@@ -6,7 +6,7 @@ import feign.Response;
 import feign.Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import vn.com.product.core.utils.JSONParserUtils;
+import vn.com.product.core.utils.JSONUtils;
 
 import java.io.IOException;
 
@@ -24,19 +24,16 @@ public class FeignClientLogger extends Logger {
         var logString = new StringBuilder(System.lineSeparator());
         String protocolVersion = resolveProtocolVersion(request.protocolVersion());
 
-        // Method, url, protocol
         logString.append(String.format(methodTag(configKey) + "---> %s %s %s", request.httpMethod().name(), request.url(), protocolVersion))
                 .append(System.lineSeparator());
 
-        // Header
         request.headers().forEach((key, value) ->
                 logString.append(StringTemplate.STR. "\{ key }= \{ String.join(",", value) }" )
                 .append(System.lineSeparator()));
 
-        // Body
         if (request.body() != null) {
             var bodyString = request.charset() != null ? new String(request.body(), request.charset()) : "Binary Data";
-            logString.append(JSONParserUtils.prettyPrintString(bodyString));
+            logString.append(JSONUtils.prettyPrintString(bodyString));
         }
 
         log.info(logString.toString());
@@ -58,7 +55,7 @@ public class FeignClientLogger extends Logger {
             byte[] bodyData = Util.toByteArray(response.body().asInputStream());
             bodyLength = bodyData.length;
             if (bodyLength > 0) {
-                logString.append(JSONParserUtils.prettyPrintString(
+                logString.append(JSONUtils.prettyPrintString(
                         Util.decodeOrDefault(bodyData, Util.UTF_8, "Binary data")))
                         .append(System.lineSeparator());
             }
