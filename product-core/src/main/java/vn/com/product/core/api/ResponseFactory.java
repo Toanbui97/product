@@ -19,19 +19,19 @@ public class ResponseFactory {
 
     public ResponseEntity<BaseResponse<Object>> success() {
         return ResponseEntity.ok( new BaseResponse<>(0, ResponseMessage.SUCCESS.getMessage(),
-                commonHttpHeader.getTraceId()));
+                commonHttpHeader.getCorrelationId()));
     }
 
     public <T> ResponseEntity<BaseResponse<T>> success(T data) {
         return ResponseEntity.ok(new BaseResponse<>(0, ResponseMessage.SUCCESS.getMessage(),
-                commonHttpHeader.getTraceId(), data));
+                commonHttpHeader.getCorrelationId(), data));
     }
 
     public <T, E extends BaseException> ResponseEntity<BaseResponse<T>> fail(T data, HttpStatusCode statusCode, E exception) {
         return ResponseEntity.status(statusCode)
                 .body(new BaseResponse<>(1, exception.getExceptionMessage().getValue(),
                         exception.getExceptionMessage().getKey(),
-                        commonHttpHeader.getTraceId(), exception.getErrorField(),
+                        commonHttpHeader.getCorrelationId(), exception.getErrorField(),
                         data));
     }
 }

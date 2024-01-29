@@ -1,5 +1,6 @@
 package vn.com.product.core.aop;
 
+import feign.Util;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,8 +11,10 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.weaver.Utils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import vn.com.product.core.utils.JSONParserUtils;
 import vn.com.product.core.api.BaseRequest;
 import vn.com.product.core.api.BaseResponse;
@@ -30,20 +33,21 @@ public class RestApiLogging {
     private CommonHttpHeader commonHttpHeader;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-    public void restApiPointCut() {}
+    public void restApiPointCut() {
+    }
 
     @Pointcut("within(vn.com.product.core.api.ResponseFactory)")
-    public void responseEntityPointCut() {}
+    public void responseEntityPointCut() {
+    }
 
     @Before("restApiPointCut()")
     public void beforeCallApi(JoinPoint joinPoint) {
-        var requestBody = getRequestBody(joinPoint);
         var headerLogString = new StringBuilder();
 
         commonHttpHeader.getHeaderMap().forEach((key, value) ->
-                headerLogString.append(StringTemplate.STR."\{key}= \{value}")
+                headerLogString.append(StringTemplate.STR. "\{ key }= \{ value }" )
                         .append(System.lineSeparator()));
-
+        var requestBody = getRequestBody(joinPoint);
         if (requestBody != null) {
             log.info("""
 
@@ -56,7 +60,7 @@ public class RestApiLogging {
                     JSONParserUtils.writeValueAsString(requestBody));
         } else {
             log.info("""
-                            
+                                                        
                             ---> Receive: {}.{}
                             {}
                             """,
@@ -69,13 +73,19 @@ public class RestApiLogging {
     public void afterReturnResponse(ResponseEntity<?> response) {
         if (response != null && response.getBody() instanceof BaseResponse<?> body) {
             log.info("""
-                            
+                                                        
                             <--- Response: {}.{}
                             {}
                             """
                     , httpRequest.getMethod(), httpRequest.getRequestURL(), JSONParserUtils.writeValueAsString(body));
         }
         commonHttpHeader.getHeaderMap().forEach(httpResponse::setHeader);
+    }
+
+    private String getBodyRaw(HttpServletRequest httpServletRequest) {
+        var contentCached = new ContentCachingRequestWrapper(httpServletRequest);
+        var bodyBytes = contentCached.getContentAsByteArray();
+        return Util.decodeOrDefault(bodyBytes, Util.UTF_8, "Binary data");
     }
 
     private BaseRequest<?> getRequestBody(JoinPoint joinPoint) {

@@ -24,15 +24,14 @@ public class FeignClientLogger extends Logger {
         var logString = new StringBuilder(System.lineSeparator());
         String protocolVersion = resolveProtocolVersion(request.protocolVersion());
 
-        // Request method, url, protocol
+        // Method, url, protocol
         logString.append(String.format(methodTag(configKey) + "---> %s %s %s", request.httpMethod().name(), request.url(), protocolVersion))
                 .append(System.lineSeparator());
 
-        // HttpHeaders
-        request.headers().forEach((key, value) -> {
-            logString.append(StringTemplate.STR. "\{ key }= \{ String.join(",", value) }" )
-                    .append(System.lineSeparator());
-        });
+        // Header
+        request.headers().forEach((key, value) ->
+                logString.append(StringTemplate.STR. "\{ key }= \{ String.join(",", value) }" )
+                .append(System.lineSeparator()));
 
         // Body
         if (request.body() != null) {
@@ -63,9 +62,11 @@ public class FeignClientLogger extends Logger {
                         Util.decodeOrDefault(bodyData, Util.UTF_8, "Binary data")))
                         .append(System.lineSeparator());
             }
+            log.info(logString.toString());
+            return response.toBuilder().body(bodyData).build();
+        } else {
+            log.info(logString.toString());
+            return response;
         }
-
-        log.info(logString.toString());
-        return response;
     }
 }

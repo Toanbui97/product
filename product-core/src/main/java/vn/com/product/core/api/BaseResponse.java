@@ -19,7 +19,7 @@ public class BaseResponse<T> implements Serializable {
     private int status;
     private String errorKey;
     private String message;
-    private String traceId;
+    private String correlationId;
     private String fieldError;
     private long responseTimestamp = Instant.now().toEpochMilli();
     private Integer page;
@@ -28,24 +28,24 @@ public class BaseResponse<T> implements Serializable {
     private Long totalPage;
     private transient T data;
 
-    public BaseResponse(int status, String message, String traceId) {
+    public BaseResponse(int status, String message, String correlationId) {
         this.status = status;
         this.message = message;
-        this.traceId = traceId;
+        this.correlationId = correlationId;
     }
 
-    public BaseResponse(int status, String message, String traceId, T data) {
-        this(status, message, traceId);
+    public BaseResponse(int status, String message, String correlationId, T data) {
+        this(status, message, correlationId);
         this.data = data;
     }
-    public BaseResponse(int status, String message, String errorKey, String traceId, String fieldError) {
-        this(status, message, traceId);
+    public BaseResponse(int status, String message, String errorKey, String correlationId, String fieldError) {
+        this(status, message, correlationId);
         this.errorKey = errorKey;
         this.fieldError = fieldError;
     }
 
-    public BaseResponse(int status, String message, String errorKey, String traceId, String fieldError, T data) {
-       this(status, message, errorKey, traceId, fieldError);
+    public BaseResponse(int status, String message, String errorKey, String correlationId, String fieldError, T data) {
+       this(status, message, errorKey, correlationId, fieldError);
        this.data = data;
     }
 

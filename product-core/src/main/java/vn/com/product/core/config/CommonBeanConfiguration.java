@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.servlet.DispatcherServlet;
 import vn.com.product.core.api.CommonHttpHeader;
 
@@ -23,11 +22,11 @@ public class CommonBeanConfiguration {
     @RequestScope
     public CommonHttpHeader commonHttpHeader(HttpServletRequest httpServletRequest) {
         var commonHeader = new CommonHttpHeader();
-        commonHeader.setTraceId(httpServletRequest.getHeader("trace-id"));
-        commonHeader.setRef(httpServletRequest.getHeader("ref"));
-        commonHeader.setUserId(httpServletRequest.getHeader("user-id"));
-        commonHeader.setLocale(StringUtils.hasText(httpServletRequest.getHeader("locale")) ?
-                httpServletRequest.getHeader("locale") : "en");
+        commonHeader.setCorrelationId(httpServletRequest.getHeader(CommonHttpHeader.CORRELATION_ID));
+        commonHeader.setRefId(httpServletRequest.getHeader(CommonHttpHeader.REF_ID));
+        commonHeader.setUserId(httpServletRequest.getHeader(CommonHttpHeader.USER_ID));
+        commonHeader.setLocale(StringUtils.hasText(httpServletRequest.getHeader(CommonHttpHeader.LANGUAGE)) ?
+                httpServletRequest.getHeader(CommonHttpHeader.LANGUAGE) : CommonHttpHeader.LANGUAGE_DEFAULT);
         return commonHeader;
     }
 
