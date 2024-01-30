@@ -1,12 +1,13 @@
 package vn.com.product.core.config;
 
+import io.swagger.v3.oas.models.parameters.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.DispatcherServlet;
 import vn.com.product.core.api.CommonHttpHeader;
@@ -44,6 +45,20 @@ public class CommonBeanConfiguration {
         dispatcherServlet.setPublishEvents(webMvcProperties.isPublishRequestHandledEvents());
         dispatcherServlet.setEnableLoggingRequestDetails(webMvcProperties.isLogRequestDetails());
         return dispatcherServlet;
+    }
+
+    @Bean
+    public OperationCustomizer operationCustomizer() {
+        return (operation, _) -> {
+            CommonHttpHeader.COMMON_HEADER.forEach(header ->
+                    operation.addParametersItem(
+                            new Parameter()
+                                    .in("header")
+                                    .name(header)
+                                    .required(false)
+                    ));
+            return operation;
+        };
     }
 
 }

@@ -10,4 +10,5 @@ endpoint:
   no-auth: > 
     /swagger-ui*/**,
     /favicon.ico,
-    /v3/api-docs*/**
+    /v3/api-docs*/**,
+    /actuator*/**
