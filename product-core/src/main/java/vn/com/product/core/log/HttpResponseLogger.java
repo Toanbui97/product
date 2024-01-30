@@ -18,10 +18,10 @@ import vn.com.product.core.utils.JSONUtils;
 import vn.com.product.core.api.BaseRequest;
 import vn.com.product.core.api.CommonHttpHeader;
 
+@Slf4j
 @Aspect
 @Configuration
 @RequiredArgsConstructor
-@Slf4j
 public class HttpResponseLogger {
 
     private final HttpServletRequest httpRequest;

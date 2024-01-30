@@ -10,14 +10,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 import vn.com.product.core.api.CommonHttpHeader;
 import vn.com.product.core.constant.FilterOrderConstant;
+import vn.com.product.core.utils.HttpRequestWrapper;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Order(value = FilterOrderConstant.HTTP_REQUEST_LOGGING_FILTER)
 @Slf4j
@@ -38,7 +38,7 @@ public class HttpRequestLogger extends OncePerRequestFilter {
             }
         });
 
-        var requestCached = new CachedBodyHttpRequest(request);
+        var requestCached = new HttpRequestWrapper(request);
         var bodyData = requestCached.getCache();
         if (bodyData.length > 0) {
             log.info("""

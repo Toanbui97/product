@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,7 @@ import vn.com.product.core.utils.JSONUtils;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -40,16 +42,19 @@ public class HttpHeaderRequireFilter extends OncePerRequestFilter {
             ,@NonNull FilterChain filterChain) throws ServletException, IOException {
 
         var uri = request.getRequestURI();
+        var pathPatternParser = PathPatternParser.defaultInstance;
         var isNoAuthEndpoint = Arrays.stream(noAuthPaths).anyMatch(path ->
-                PathPatternParser.defaultInstance.parse(path)
+                pathPatternParser.parse(path)
                         .matches(PathContainer.parsePath(uri)));
+
         try {
             if (!isNoAuthEndpoint) {
-                for (var header : CommonHttpHeader.COMMON_HEADER) {
+                for (var header : CommonHttpHeader.REQUIRED_HEADER) {
                     if (!StringUtils.hasText(request.getHeader(header)))
                         throw new MissingRequireHeaderException(ExceptionMessage.EXCEPT0002, header);
                 }
             }
+
             filterChain.doFilter(request, response);
         } catch (BaseException exception) {
             handleFilterException(response, exception);
@@ -57,11 +62,12 @@ public class HttpHeaderRequireFilter extends OncePerRequestFilter {
     }
 
     private void handleFilterException(HttpServletResponse response, BaseException throwable) throws IOException {
+        var responseEntity = responseFactory.fail(null, HttpStatusCode.valueOf(400), throwable);
+
         response.getWriter().write(Objects.requireNonNull(JSONUtils.writeValueAsString(
-                responseFactory.fail(null, HttpStatusCode.valueOf(400), throwable)
-                        .getBody())));
-        response.setStatus(400);
-        response.setContentType("application/json");
+                responseEntity.getBody())));
+        response.setStatus(responseEntity.getStatusCode().value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().flush();
     }
 }

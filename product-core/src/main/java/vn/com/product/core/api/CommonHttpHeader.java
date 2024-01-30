@@ -18,6 +18,7 @@ public class CommonHttpHeader implements Serializable {
     public static final String LANGUAGE = "accept-language";
     public static final String LANGUAGE_DEFAULT = "en";
     public static final Set<String> COMMON_HEADER = Set.of(CORRELATION_ID, USER_ID, REF_ID, LANGUAGE);
+    public static final Set<String> REQUIRED_HEADER = Set.of(USER_ID, REF_ID);
 
     private String correlationId;
     private String userId;
